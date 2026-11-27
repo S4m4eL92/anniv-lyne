@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>Anniversaire de Lyne – nos plats</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Nunito+Sans:wght@400;600;700&display=swap">
+<style>
+/* Mise en page : une colonne étroite façon carte de restaurant, le formulaire puis la liste partagée */
+:root {
+  --bg: #f1f5f4;
+  --surface: #ffffff;
+  --fg: #1d2b2a;
+  --muted: #5d6f6c;
+  --line: #d5e0de;
+  --accent: #1f6f66;
+  --accent-soft: #dcefeb;
+  --accent-fg: #ffffff;
+  --plum: #7a3b5c;
+  --danger: #a33a32;
+  --display: "DM Serif Display", Georgia, "Times New Roman", serif;
+  --body: "Nunito Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121a19; --surface: #1a2524; --fg: #e6efed; --muted: #9db0ac; --line: #2c3b39;
+  --accent: #5cc0b2; --accent-soft: #1f3a37; --accent-fg: #0d1716; --plum: #d79ab9; --danger: #ef8a80;
+  color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121a19; --surface: #1a2524; --fg: #e6efed; --muted: #9db0ac; --line: #2c3b39;
+  --accent: #5cc0b2; --accent-soft: #1f3a37; --accent-fg: #0d1716; --plum: #d79ab9; --danger: #ef8a80;
+  color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 680px; margin: 0 auto; padding-block: 2rem 4rem;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 2rem; }
+h1, h2 { font-family: var(--display); font-weight: 400; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2rem, 6vw, 2.8rem); line-height: 1.1; }
+h2 { font-size: 1.6rem; }
+.eyebrow { text-transform: uppercase; letter-spacing: .12em; font-size: .75rem; font-weight: 700; color: var(--accent); }
+header { display: grid; gap: .5rem; }
+header p { margin: 0; color: var(--muted); max-width: 60ch; }
+
+.menu { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 1.5rem; text-align: center; display: grid; gap: .35rem; }
+.menu .price { font-family: var(--display); font-style: italic; color: var(--plum); font-size: 1.25rem; }
+.menu .course { font-size: .95rem; }
+.menu .or { font-style: italic; color: var(--muted); font-size: .85rem; }
+.menu .sep { color: var(--muted); letter-spacing: .4em; font-size: .8rem; }
+.menu .note { font-size: .85rem; color: var(--muted); }
+
+form { display: grid; gap: 1.25rem; }
+fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: .5rem; }
+legend, label.lbl { font-weight: 700; padding: 0; margin-bottom: .35rem; }
+.hint { font-size: .85rem; color: var(--muted); font-weight: 400; }
+input[type=text], textarea { width: 100%; box-sizing: border-box; font: inherit; color: var(--fg); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 6px; padding: .7rem .8rem; }
+textarea { min-height: 3.5rem; resize: vertical; }
+.choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: .6rem; }
+.choice { position: relative; }
+.choice input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.choice span { display: block; height: 100%; box-sizing: border-box; border: 1.5px solid var(--line); border-radius: 6px; background: var(--surface);
+  padding: .7rem .85rem; cursor: pointer; }
+.choice span b { display: block; }
+.choice span small { color: var(--muted); }
+.choice input:checked + span { border-color: var(--accent); background: var(--accent-soft); }
+.choice input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+input:focus-visible, textarea:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.actions { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; }
+button { font: inherit; font-weight: 700; border-radius: 6px; padding: .7rem 1.2rem; cursor: pointer; border: 1.5px solid var(--accent); }
+.primary { background: var(--accent); color: var(--accent-fg); }
+.ghost { background: transparent; color: var(--accent); }
+.small { padding: .3rem .65rem; font-size: .85rem; font-weight: 600; }
+.danger { color: var(--danger); border-color: var(--danger); background: transparent; }
+.status { font-size: .9rem; color: var(--muted); min-height: 1.4em; margin: 0; }
+.status.err { color: var(--danger); }
+
+.summary { display: flex; flex-wrap: wrap; gap: .5rem; }
+.pill { background: var(--accent-soft); color: var(--fg); border-radius: 999px; padding: .3rem .8rem; font-size: .9rem; font-variant-numeric: tabular-nums; }
+.pill b { color: var(--accent); }
+.list { display: grid; gap: 0; border-top: 1px solid var(--line); }
+.row { display: flex; flex-wrap: wrap; gap: .25rem 1rem; justify-content: space-between; align-items: center; padding: .8rem 0; border-bottom: 1px solid var(--line); }
+.row .who { min-width: 0; }
+.row .who b { font-size: 1.05rem; }
+.row .who div { color: var(--muted); font-size: .9rem; }
+.row .allergy { color: var(--plum); }
+.row .btns { display: flex; gap: .4rem; }
+.empty { color: var(--muted); padding: 1rem 0; margin: 0; }
+.copybox { display: grid; gap: .5rem; }
+.copybox pre { white-space: pre-wrap; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: .8rem; font-size: .85rem; margin: 0; }
+footer { font-size: .8rem; color: var(--muted); }
+@media (prefers-reduced-motion: no-preference) { .choice span { transition: background .15s, border-color .15s; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Domaine de la Barollière · St-Paul-en-Jarez</div>
+    <h1>Anniversaire de Lyne</h1>
+    <p>Indique ton nom et choisis ton plat. Tu peux aussi remplir pour tes enfants ou pour quelqu’un d’autre : un formulaire par personne.</p>
+  </header>
+
+  <section class="menu" aria-label="Menu Barollière">
+    <h2>Menu Barollière</h2>
+    <div class="price">26,50 €</div>
+    <div class="course">Marbré de paleron braisé aux légumes du potager</div>
+    <div class="sep">✶✶✶✶</div>
+    <div class="course">Confit de porc, jus corsé</div>
+    <div class="or">ou</div>
+    <div class="course">Risotto au potimarron rôti, éclats de noisettes torréfiées</div>
+    <div class="sep">✶✶✶✶</div>
+    <div class="course">Fromage frais ou affiné</div>
+    <div class="sep">✶✶✶✶</div>
+    <div class="course">Dessert choisi par l’organisateur</div>
+    <div class="note">Tous les plats sont servis garnis.</div>
+  </section>
+
+  <form id="f" novalidate>
+    <h2 id="formTitle">Mon choix</h2>
+    <div>
+      <label class="lbl" for="nom">Prénom et nom</label>
+      <input type="text" id="nom" autocomplete="name" maxlength="60" placeholder="ex. Marie Dupont" required>
+    </div>
+
+    <fieldset>
+      <legend>Menu</legend>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="formule" id="f-adulte" value="adulte" checked><span><b>Adulte</b><small>Menu Barollière</small></span></label>
+        <label class="choice"><input type="radio" name="formule" id="f-matru" value="matru"><span><b>Enfant · Le Mâtru</b><small>jusqu’à 8 ans env. · steak haché & frites, glace</small></span></label>
+        <label class="choice"><input type="radio" name="formule" id="f-garagna" value="garagna"><span><b>Enfant · Le Garagna</b><small>jusqu’à 12 ans · hamburger & frites</small></span></label>
+      </div>
+    </fieldset>
+
+    <fieldset id="platSet">
+      <legend>Plat</legend>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="plat" id="p-porc" value="Confit de porc"><span><b>Confit de porc</b><small>jus corsé</small></span></label>
+        <label class="choice"><input type="radio" name="plat" id="p-risotto" value="Risotto au potimarron"><span><b>Risotto au potimarron</b><small>végétarien · éclats de noisettes</small></span></label>
+      </div>
+    </fieldset>
+
+    <fieldset id="fromageSet">
+      <legend>Fromage</legend>
+      <div class="choices">
+        <label class="choice"><input type="radio" name="fromage" id="fr-frais" value="Fromage frais"><span><b>Fromage frais</b></span></label>
+        <label class="choice"><input type="radio" name="fromage" id="fr-affine" value="Fromage affiné"><span><b>Fromage affiné</b></span></label>
+      </div>
+    </fieldset>
+
+    <div>
+      <label class="lbl" for="allergies">Allergies ou régime <span class="hint">(facultatif)</span></label>
+      <textarea id="allergies" maxlength="200" placeholder="ex. sans gluten, allergie aux noix…"></textarea>
+    </div>
+
+    <div class="actions">
+      <button type="submit" class="primary" id="submitBtn">Enregistrer mon choix</button>
+      <button type="button" class="ghost" id="cancelBtn" hidden>Annuler la modification</button>
+    </div>
+    <p class="status" id="status" role="status"></p>
+    <div class="copybox" id="copybox" hidden>
+      <p class="status">Ton choix n’a pas pu être enregistré ici. Copie ce message et envoie-le à l’organisateur :</p>
+      <pre id="copyText"></pre>
+      <div><button type="button" class="ghost small" id="copyBtn">Copier</button></div>
+    </div>
+  </form>
+
+  <section style="display:grid;gap:1rem" aria-labelledby="listTitle">
+    <div class="actions" style="justify-content:space-between"><h2 id="listTitle">Les choix de la famille</h2><button type="button" class="ghost small" id="refreshBtn">Actualiser</button></div>
+    <div class="summary" id="summary"></div>
+    <div class="list" id="list"><p class="empty" id="emptyMsg">Chargement des choix…</p></div>
+  </section>
+
+  <footer>Les choix sont à transmettre au restaurant au moins 10 jours avant le repas.</footer>
+</div>
+
+<script>
+// Adresse de l'application Web Google Apps Script (voir README.md). Laisser vide tant qu'elle n'existe pas.
+const SCRIPT_URL = "";
+</script>
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const form = $("f"), statusEl = $("status");
+  let rows = [], editingId = null;
+  const online = !!SCRIPT_URL;
+  const FORMULES = { adulte: "Adulte", matru: "Enfant · Le Mâtru", garagna: "Enfant · Le Garagna" };
+
+  function val(name) { const el = form.querySelector('input[name="' + name + '"]:checked'); return el ? el.value : ""; }
+  function setRadio(name, v) { form.querySelectorAll('input[name="' + name + '"]').forEach(el => { el.checked = el.value === v; }); }
+  function say(msg, err) { statusEl.textContent = msg; statusEl.classList.toggle("err", !!err); }
+  function emptyMsg(text) { const l = $("list"); l.textContent = ""; const p = document.createElement("p"); p.className = "empty"; p.textContent = text; l.appendChild(p); }
+
+  function syncFields() {
+    const f = val("formule");
+    $("platSet").hidden = f !== "adulte";
+    $("fromageSet").hidden = f === "matru";
+  }
+  form.querySelectorAll('input[name="formule"]').forEach(el => el.addEventListener("change", syncFields));
+  syncFields();
+
+  function describe(r) {
+    const parts = [FORMULES[r.formule] || "Adulte"];
+    if (r.formule === "adulte" && r.plat) parts.push(r.plat);
+    if (r.formule !== "matru" && r.fromage) parts.push(r.fromage);
+    return parts.join(" · ");
+  }
+
+  async function api(body) {
+    const opts = body ? { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) } : {};
+    const res = await fetch(SCRIPT_URL + (body ? "" : "?t=" + Date.now()), opts);
+    const json = await res.json();
+    if (!json.ok) throw new Error(json.error || "erreur");
+    rows = json.rows || [];
+    render();
+  }
+
+  function render() {
+    const list = $("list"); list.textContent = "";
+    const sorted = rows.slice().sort((a, b) => (a.nom || "").localeCompare(b.nom || "", "fr"));
+    if (!sorted.length) emptyMsg("Personne n’a encore choisi. Sois le premier ou la première !");
+    for (const d of sorted) {
+      const row = document.createElement("div"); row.className = "row";
+      const who = document.createElement("div"); who.className = "who";
+      const b = document.createElement("b"); b.textContent = d.nom || "Sans nom"; who.appendChild(b);
+      const line = document.createElement("div"); line.textContent = describe(d); who.appendChild(line);
+      if (d.allergies) { const a = document.createElement("div"); a.className = "allergy"; a.textContent = "⚠ " + d.allergies; who.appendChild(a); }
+      const btns = document.createElement("div"); btns.className = "btns";
+      const edit = document.createElement("button"); edit.type = "button"; edit.className = "ghost small"; edit.textContent = "Modifier";
+      edit.addEventListener("click", () => startEdit(d));
+      const del = document.createElement("button"); del.type = "button"; del.className = "danger small"; del.textContent = "Supprimer";
+      let armed = false;
+      del.addEventListener("click", async () => {
+        if (!armed) { armed = true; del.textContent = "Confirmer ?"; setTimeout(() => { armed = false; del.textContent = "Supprimer"; }, 4000); return; }
+        del.disabled = true;
+        try { await api({ action: "delete", id: d.id }); say("Choix de " + (d.nom || "cette personne") + " supprimé."); }
+        catch (e) { del.disabled = false; say("La suppression a échoué. Réessaie dans un instant.", true); }
+      });
+      btns.append(edit, del);
+      row.append(who, btns);
+      list.appendChild(row);
+    }
+    const s = $("summary"); s.textContent = "";
+    const count = (pred) => sorted.filter(pred).length;
+    const items = [
+      ["Personnes", sorted.length],
+      ["Confit de porc", count(d => d.formule === "adulte" && d.plat === "Confit de porc")],
+      ["Risotto", count(d => d.formule === "adulte" && d.plat === "Risotto au potimarron")],
+      ["Fromage frais", count(d => d.formule !== "matru" && d.fromage === "Fromage frais")],
+      ["Fromage affiné", count(d => d.formule !== "matru" && d.fromage === "Fromage affiné")],
+      ["Mâtru", count(d => d.formule === "matru")],
+      ["Garagna", count(d => d.formule === "garagna")],
+    ];
+    for (const [label, n] of items) {
+      if (label !== "Personnes" && !n) continue;
+      const p = document.createElement("span"); p.className = "pill";
+      const bb = document.createElement("b"); bb.textContent = n;
+      p.append(bb, " " + label); s.appendChild(p);
+    }
+  }
+
+  function startEdit(d) {
+    editingId = d.id;
+    $("nom").value = d.nom || "";
+    setRadio("formule", d.formule || "adulte");
+    setRadio("plat", d.plat || ""); setRadio("fromage", d.fromage || "");
+    $("allergies").value = d.allergies || "";
+    syncFields();
+    $("formTitle").textContent = "Modifier le choix de " + (d.nom || "");
+    $("submitBtn").textContent = "Enregistrer la modification";
+    $("cancelBtn").hidden = false;
+    say("");
+    form.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  function resetForm() {
+    editingId = null; form.reset(); setRadio("formule", "adulte"); syncFields();
+    $("formTitle").textContent = "Mon choix";
+    $("submitBtn").textContent = "Enregistrer mon choix";
+    $("cancelBtn").hidden = true;
+  }
+  $("cancelBtn").addEventListener("click", () => { resetForm(); say(""); });
+
+  function showCopy(d) {
+    $("copyText").textContent = "Anniversaire de Lyne – " + d.nom + " : " + describe(d) + (d.allergies ? " (allergies : " + d.allergies + ")" : "");
+    $("copybox").hidden = false;
+  }
+  $("copyBtn").addEventListener("click", () => {
+    const t = $("copyText").textContent;
+    const fallback = () => { const r = document.createRange(); r.selectNodeContents($("copyText")); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); };
+    try { navigator.clipboard.writeText(t).then(() => { $("copyBtn").textContent = "Copié"; }, fallback); } catch (e) { fallback(); }
+  });
+
+  function newId() { return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(36).slice(2); }
+
+  form.addEventListener("submit", async (ev) => {
+    ev.preventDefault();
+    const nom = $("nom").value.trim();
+    const formule = val("formule") || "adulte";
+    const d = { nom, formule, plat: formule === "adulte" ? val("plat") : "", fromage: formule === "matru" ? "" : val("fromage"),
+      allergies: $("allergies").value.trim() };
+    if (!nom) { say("Écris ton prénom et ton nom pour qu’on sache qui a choisi quoi.", true); $("nom").focus(); return; }
+    if (formule === "adulte" && !d.plat) { say("Choisis un plat : confit de porc ou risotto.", true); return; }
+    if (formule !== "matru" && !d.fromage) { say("Choisis ton fromage : frais ou affiné.", true); return; }
+    $("copybox").hidden = true;
+    if (!online) { say(""); showCopy(d); return; }
+    $("submitBtn").disabled = true; say("Enregistrement…");
+    try {
+      await api(Object.assign({ action: "save", id: editingId || newId() }, d));
+      say("C’est noté pour " + nom + ". Merci !");
+      resetForm();
+    } catch (e) {
+      say(""); showCopy(d);
+    } finally { $("submitBtn").disabled = false; }
+  });
+
+  async function load() {
+    if (!online) { emptyMsg("La liste partagée n’est pas encore branchée. Tu peux remplir le formulaire et copier ton choix."); return; }
+    try { await api(); }
+    catch (e) { emptyMsg("Impossible de charger les choix pour le moment. Appuie sur Actualiser dans un instant."); }
+  }
+  $("refreshBtn").addEventListener("click", load);
+  load();
+})();
+</script>
+</body>
+</html>
