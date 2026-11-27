@@ -231,15 +231,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw3vbgJ8QU7InYMsq1I7
       const btns = document.createElement("div"); btns.className = "btns";
       const edit = document.createElement("button"); edit.type = "button"; edit.className = "ghost small"; edit.textContent = "Modifier";
       edit.addEventListener("click", () => startEdit(d));
-      const del = document.createElement("button"); del.type = "button"; del.className = "danger small"; del.textContent = "Supprimer";
-      let armed = false;
-      del.addEventListener("click", async () => {
-        if (!armed) { armed = true; del.textContent = "Confirmer ?"; setTimeout(() => { armed = false; del.textContent = "Supprimer"; }, 4000); return; }
-        del.disabled = true;
-        try { await api({ action: "delete", id: d.id }); say("Choix de " + (d.nom || "cette personne") + " supprimé."); }
-        catch (e) { del.disabled = false; say("La suppression a échoué. Réessaie dans un instant.", true); }
-      });
-      btns.append(edit, del);
+      btns.append(edit);
       row.append(who, btns);
       list.appendChild(row);
     }
